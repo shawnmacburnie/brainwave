@@ -5,16 +5,16 @@ import tensorflow as tf
 import cPickle as pickle
 
 class Network():
-    def __init__(self, x, y_, number_output, keep_prob, file_name = 'weights.pkl', logging = True):
+    def __init__(self, x, y_, number_output, number_input, keep_prob, file_name = 'weights.pkl', logging = True):
         self.x = x
         self.y_ = y_
         self.keep_prob = keep_prob
         self.file_name = file_name
         self.logging = logging
 
-        self.create_weights(number_output)
+        self.create_weights(number_output, number_input)
 
-    def create_weights(self, number_output):
+    def create_weights(self, number_output, number_input):
         if os.path.isfile(self.file_name):
             if self.logging:
                 print "Weight File Found! loading weights!"
@@ -26,7 +26,7 @@ class Network():
             if self.logging:
                 print "Initilizing new weights."
             self.weights = {
-                'w_1':self.weight_variable([2000,2048]),
+                'w_1':self.weight_variable([number_input,2048]),
                 'b_1':self.bias_variable([2048]),
 
                 'w_2':self.weight_variable([2048,2048]),
@@ -79,7 +79,10 @@ class Network():
     def save(self):
         if self.logging:
             print "Saving Weights"
+        weights = {}
+        for key, val in self.weights.iteritems():
+            weights[key] = val.eval()
         output = open(self.file_name, 'wb')
-        pickle.dump(self.weights, output)
+        pickle.dump(weights, output)
         if self.logging:
             print "Weights Saved!"

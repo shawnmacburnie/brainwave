@@ -8,12 +8,13 @@ from network import Network
 data = TrainingData()
 sys.stdout.flush()
 numberOuput = data.get_num_out()
+numberInput = data.get_num_in()
 sess = tf.InteractiveSession()
 
 x = tf.placeholder("float", shape=[None, 2000]) #100x20
 y_ = tf.placeholder("float", shape=[None, numberOuput])
 keep_prob = tf.placeholder(tf.float32)
-network = Network(x, y_, numberOuput, keep_prob)
+network = Network(x, y_, numberOuput, numberInput, keep_prob)
 y_conv = network.create_network()
 cross_entropy = network.get_loss()
 
@@ -32,6 +33,8 @@ print 'Running network %d times on batches of %d logging every %d and training o
 try:
     for i in range(num_iter):
         batch = data.get_batch(batch_size)
+        if len(batch[0]) < 1:
+            continue
         if i%logging == 0:
             train_accuracy = accuracy.eval(feed_dict={x:batch[0], y_: batch[1], keep_prob: 1.0})
             print("\nstep %d, training accuracy %g"%(i, train_accuracy))

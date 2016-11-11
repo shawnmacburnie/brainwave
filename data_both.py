@@ -31,6 +31,9 @@ class TrainingData():
     def get_num_out(self):
         return len(self.classes)
 
+    def get_num_in(self):
+        return len(self.train_set[0])
+
     def init_test_files(self):
         self.test_filenames = []
         random.shuffle(self.filenames)
