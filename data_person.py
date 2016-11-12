@@ -9,19 +9,11 @@ class TrainingData():
         self.valid_train_set = [] # Set for valid training output
         self.test_set = [] # Set for testing input
         self.valid_test_set = [] # Set for valid test output
+        self.logging = logging
 
         self.window_size = window_size # 10 seconds
-        self.logging = logging
-        self.classes = ["Bruce-game", "Bruce-music", "Bruce-reading", "Bruce-video",
-             "Carl-game", "Carl-music", "Carl-reading", "Carl-video",
-             "Jerry-game", "Jerry-music", "Jerry-reading", "Jerry-video",
-             "Matt-game", "Matt-music", "Matt-reading", "Matt-video",
-             "Toby-game", "Toby-music", "Toby-reading", "Toby-video"]
-        self.indexes = {"Bruce-game": 0, "Bruce-music": 0, "Bruce-reading": 0, "Bruce-video": 0,
-             "Carl-game": 0, "Carl-music": 0, "Carl-reading": 0, "Carl-video": 0,
-             "Jerry-game": 0, "Jerry-music": 0, "Jerry-reading": 0, "Jerry-video": 0,
-             "Matt-game": 0, "Matt-music": 0, "Matt-reading": 0, "Matt-video": 0,
-             "Toby-game": 0, "Toby-music": 0, "Toby-reading": 0, "Toby-video": 0}
+        self.classes = ["Bruce", "Carl", "Jerry", "Matt", "Toby"]
+        self.indexes = {"Bruce": 0, "Carl": 0, "Jerry": 0, "Matt": 0, "Toby": 0}
         self.filenames = open("data/data_files.txt", "r").read().splitlines()
         if self.logging:
             print "Initilizing Data"
@@ -64,13 +56,11 @@ class TrainingData():
         return carl_data
 
     def get_equal_amount_test(self, break_point):
-        indexes = {"Bruce-game": break_point, "Bruce-music": break_point, "Bruce-reading": break_point, "Bruce-video": break_point,
-             "Carl-game": break_point, "Carl-music": break_point, "Carl-reading": break_point, "Carl-video": break_point,
-             "Jerry-game": break_point, "Jerry-music": break_point, "Jerry-reading": break_point, "Jerry-video": break_point,
-             "Matt-game": break_point, "Matt-music": break_point, "Matt-reading": break_point, "Matt-video": break_point,
-             "Toby-game": break_point, "Toby-music": break_point, "Toby-reading": break_point, "Toby-video": break_point}
+        indexes = {"Bruce": break_point, "Carl": break_point, "Jerry": break_point, "Matt": break_point, "Toby": break_point}
         while len(self.test_filenames) < len(self.filenames) - break_point:
             for key, value in indexes.iteritems():
+                if value >= len(self.filenames):
+                    value = 0
                 filename = self.filenames[value]
                 name = self.get_name(filename)
                 while name != key:
@@ -89,6 +79,8 @@ class TrainingData():
     def shuffle_set(self):
         if len(self.train_set) == 0 or len(self.valid_train_set) == 0:
             self.get_files()
+        if len(self.train_set) == 0 or len(self.valid_train_set) == 0:
+            return
         # print "completed, now going to shuffle, this may take a bit of time as we have " + str(len(self.train_set))
         tmpList = list(zip(self.train_set, self.valid_train_set))
         random.shuffle(tmpList)
@@ -114,7 +106,7 @@ class TrainingData():
         input_data = []
         output_data = []
         batch_size = len(self.test_filenames) // 10
-        filenames = self.filenames[self.current_test_index:self.current_test_index + batch_size]
+        filenames = self.test_filenames[self.current_test_index:self.current_test_index + batch_size]
         for filename in filenames:
             name = self.get_name(filename)
             if name not in self.classes:
@@ -199,7 +191,7 @@ class TrainingData():
                     self.indexes[key] = 0
 
     def get_name(self, filename):
-        return filename.split('/')[1] + '-' + filename.split('/')[2]
+        return filename.split('/')[1]
 
 
     def computeData(self, data):
