@@ -3,7 +3,7 @@ import matplotlib
 import tensorflow as tf
 import sys
 import pickle
-from data_both import TrainingData
+from data_activity import TrainingData
 from network import Network
 data = TrainingData()
 sys.stdout.flush()
