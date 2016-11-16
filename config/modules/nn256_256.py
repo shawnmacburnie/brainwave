@@ -1,14 +1,19 @@
 import cPickle as pickle
 import tensorflow as tf
-import base as base
 import os.path
+import sys
+sys.path.append('./config/')
+import base as base
 
-def create_weights(number_input, number_output, file_name, logging = True):
+weight_file_name = 'nn256_256_weights.pkl'
+log_file_name = 'nn256_256.log'
+
+def create_weights(number_input, number_output, logging = True):
     weights = {}
-    if os.path.isfile(file_name):
+    if os.path.isfile(weight_file_name):
         if logging:
             print "Weight File Found! loading weights!"
-        data = pickle.load( open(file_name, "rb" ) )
+        data = pickle.load( open(weight_file_name, "rb" ) )
         for key, val in data.iteritems():
             weights[key] = tf.Variable(val)
     else:
