@@ -2,8 +2,31 @@ import random
 import math
 import numpy as np
 
+class Data():
+    def get_num_out(self):
+        return len(self.classes)
+
+    def get_num_in(self):
+        return len(self.train_set[0])
+
+    def shuffle_set(self):
+        if len(self.train_set) == 0 or len(self.valid_train_set) == 0:
+            self.get_files()
+        tmpList = list(zip(self.train_set, self.valid_train_set))
+        random.shuffle(tmpList)
+        self.train_set, self.valid_train_set = zip(*tmpList)
+
+    def get_train_size(self):
+        return len(self.train_set)
+
+    def get_test_size(self):
+        return len(self.test_set)
+
+    def get_output_order(self):
+        return self.classes
+
 # Classifying Activity and Person
-class TrainingData():
+class TrainingData(Data):
     def __init__(self, window_size = 100, logging = True):
         self.train_set = [] # set for training input
         self.valid_train_set = [] # Set for valid training output
@@ -35,12 +58,6 @@ class TrainingData():
         self.shuffle_set()
         if self.logging:
             print "Finished Initilizing Data"
-
-    def get_num_out(self):
-        return len(self.classes)
-
-    def get_num_in(self):
-        return len(self.train_set[0])
 
     def init_test_files(self):
         self.test_filenames = []
@@ -85,22 +102,6 @@ class TrainingData():
                     value = 0
 
 
-
-    def shuffle_set(self):
-        if len(self.train_set) == 0 or len(self.valid_train_set) == 0:
-            self.get_files()
-        # print "completed, now going to shuffle, this may take a bit of time as we have " + str(len(self.train_set))
-        tmpList = list(zip(self.train_set, self.valid_train_set))
-        random.shuffle(tmpList)
-        self.train_set, self.valid_train_set = zip(*tmpList)
-
-    def get_train_size(self):
-        return len(self.train_set)
-
-    def get_test_size(self):
-        return len(self.test_set)
-
-
     def get_batch(self, batch_size):
         train = self.train_set[self.current_data_index:self.current_data_index + batch_size]
         valid = self.valid_train_set[self.current_data_index:self.current_data_index + batch_size]
@@ -133,9 +134,6 @@ class TrainingData():
 
     def is_at_test_batch_end(self):
         return self.current_test_index >= len(self.test_filenames)
-
-    def get_output_order(self):
-        return self.classes
 
     def get_test_set(self):
         input_data = []
@@ -207,3 +205,5 @@ class TrainingData():
         for i in data:
             singleVector += map(float, i.split(','))
         return [singleVector]
+
+print TrainingData(logging=False).get_num_in()
