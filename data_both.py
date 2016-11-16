@@ -88,6 +88,8 @@ class TrainingData(Data):
              "Toby-game": break_point, "Toby-music": break_point, "Toby-reading": break_point, "Toby-video": break_point}
         while len(self.test_filenames) < len(self.filenames) - break_point:
             for key, value in indexes.iteritems():
+                if value >= len(self.filenames):
+                    value = 0
                 filename = self.filenames[value]
                 name = self.get_name(filename)
                 while name != key:
@@ -205,5 +207,3 @@ class TrainingData(Data):
         for i in data:
             singleVector += map(float, i.split(','))
         return [singleVector]
-
-print TrainingData(logging=False).get_num_in()

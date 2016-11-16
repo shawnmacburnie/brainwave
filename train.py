@@ -11,10 +11,10 @@ numberOuput = data.get_num_out()
 numberInput = data.get_num_in()
 sess = tf.InteractiveSession()
 
-x = tf.placeholder("float", shape=[None, 2000]) #100x20
+x = tf.placeholder("float", shape=[None, numberInput])
 y_ = tf.placeholder("float", shape=[None, numberOuput])
 keep_prob = tf.placeholder(tf.float32)
-network = Network(x, y_, numberOuput, numberInput, keep_prob)
+network = Network(x, y_, numberOuput, numberInput, keep_prob, 'nn256_256')
 y_conv = network.create_network()
 cross_entropy = network.get_loss()
 
