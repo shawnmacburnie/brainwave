@@ -14,7 +14,7 @@ sess = tf.InteractiveSession()
 x = tf.placeholder("float", shape=[None, numberInput])
 y_ = tf.placeholder("float", shape=[None, numberOuput])
 keep_prob = tf.placeholder(tf.float32)
-network = Network(x, y_, numberOuput, numberInput, keep_prob, 'nn256_256_256')
+network = Network(x, y_, numberOuput, numberInput, keep_prob, 'nn1024')
 y_conv = network.create_network()
 cross_entropy = network.get_loss()
 
@@ -24,7 +24,7 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 sess.run(tf.initialize_all_variables())
 
 batch_size = 10
-num_iter = 200000000
+num_iter = 100000000
 prob = 0.8
 logging = 1000
 print 'Running network %d times on batches of %d logging every %d and training on %f of the data' %(num_iter,batch_size,logging, prob)
