@@ -4,17 +4,17 @@ import cPickle as pickle
 import config.loader as loader
 
 class Network():
-    def __init__(self, x, y_, number_output, number_input, keep_prob, netType, logging = True):
+    def __init__(self, x, y_, number_output, number_input, keep_prob, netType, logger):
+        self.logger = logger
         self.x = x
         self.y_ = y_
         self.keep_prob = keep_prob
-        self.logging = logging
         self.nn = loader.load(netType)
 
         self.create_weights(number_input, number_output)
 
     def create_weights(self, number_input, number_output):
-        self.weights = self.nn.create_weights(number_input, number_output, self.logging)
+        self.weights = self.nn.create_weights(number_input, number_output, self.logger)
 
     def create_network(self):
         self.network = self.nn.create_network(self.x, self.weights, self.keep_prob)
@@ -29,12 +29,10 @@ class Network():
 
 
     def save(self):
-        if self.logging:
-            print "Saving Weights"
+        self.logger.log("Saving Weights")
         weights = {}
         for key, val in self.weights.iteritems():
             weights[key] = val.eval()
         output = open(self.nn.weight_file_name, 'wb')
         pickle.dump(weights, output)
-        if self.logging:
-            print "Weights Saved!"
+        self.logger.log("Weights Saved!")

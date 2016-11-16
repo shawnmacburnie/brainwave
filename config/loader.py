@@ -21,3 +21,19 @@ def load(file):
 
     if file == 'nn256_256_256':
         return nn256_256_256
+
+def get_log_file(file):
+    if file == 'nn256':
+        return nn256.log_file_name
+    if file == 'nn1024':
+        return nn1024.log_file_name
+
+    if file == 'nn256_256':
+        return nn256_256.log_file_name
+    if file == 'nn1024_256':
+        return nn1024_256.log_file_name
+    if file == 'nn1024_1024':
+        return nn1024_1024.log_file_name
+
+    if file == 'nn256_256_256':
+        return nn256_256_256.log_file_name

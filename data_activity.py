@@ -5,15 +5,14 @@ from data import Data
 
 # Classifying Activity
 class TrainingData(Data):
-    def __init__(self, window_size = 100, logging = True):
-        super(TrainingData, self).__init__()
+    def __init__(self, logger, window_size = 100, logging = True):
+        super(TrainingData, self).__init__(logger)
         self.logging = logging
         self.window_size = window_size # 10 seconds
         self.classes = ["game", "music", "reading", "video"]
         self.indexes = {"game": 0, "music": 0, "reading": 0, "video": 0}
         self.filenames = open("data/data_files.txt", "r").read().splitlines()
-        if self.logging:
-            print "Initilizing Avtivity Data"
+        self.logger.log("Initilizing Avtivity Data")
 
         self.init_test_files()
 
@@ -22,8 +21,10 @@ class TrainingData(Data):
 
         self.get_files()
         self.shuffle_set()
-        if self.logging:
-            print "Finished Initilizing Data"
+        self.logger.log("Finished Initilizing Data")
+
+    def get_text(self):
+        return 'activity'
 
     def init_test_files(self):
         self.test_filenames = []
@@ -32,9 +33,8 @@ class TrainingData(Data):
         # self.test_filenames = self.filenames[break_point: len(self.filenames)]
         self.get_equal_amount_test(break_point)
         self.filenames = self.filenames[0:break_point]
-        if self.logging:
-            print 'Training file size: ' + str(len(self.filenames))
-            print 'Test file size: ' + str(len(self.test_filenames))
+        self.logger.log('Training file size: ' + str(len(self.filenames)))
+        self.logger.log('Test file size: ' + str(len(self.test_filenames)))
 
     def get_equal_amount_test(self, break_point):
         indexes = {"game": break_point, "music": break_point, "reading": break_point, "video": break_point}

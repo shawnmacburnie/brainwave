@@ -1,0 +1,18 @@
+Initilizing Data
+Training file size: 301
+Test file size: 80
+Finished Initilizing Data
+Weight File Found! loading weights!
+Running network 5 times on batches of 10 logging every 1 and training on 0.800000 of the data with the following network: nn256
+
+step 0, training accuracy 0.4
+
+step 1, training accuracy 0.1
+
+step 2, training accuracy 0.3
+
+step 3, training accuracy 0.2
+
+step 4, training accuracy 0
+Saving Weights
+Weights Saved!

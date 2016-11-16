@@ -5,8 +5,8 @@ from data import Data
 
 # Classifying Activity and Person
 class TrainingData(Data):
-    def __init__(self, window_size = 100, logging = True):
-        super(TrainingData, self).__init__()
+    def __init__(self, logger, window_size = 100, logging = True):
+        super(TrainingData, self).__init__(logger)
         self.logging = logging
         self.current_data_index = 0
         self.current_test_index = 0
@@ -22,15 +22,16 @@ class TrainingData(Data):
              "Matt-game": 0, "Matt-music": 0, "Matt-reading": 0, "Matt-video": 0,
              "Toby-game": 0, "Toby-music": 0, "Toby-reading": 0, "Toby-video": 0}
         self.filenames = open("data/data_files.txt", "r").read().splitlines()
-        if self.logging:
-            print "Initilizing Data"
+        self.logger.log("Initilizing Data")
 
         self.init_test_files()
 
         self.get_files()
         self.shuffle_set()
-        if self.logging:
-            print "Finished Initilizing Data"
+        self.logger.log("Finished Initilizing Data")
+
+    def get_text(self):
+        return 'both'
 
     def init_test_files(self):
         self.test_filenames = []
@@ -42,9 +43,8 @@ class TrainingData(Data):
         self.filenames = self.filenames[0:break_point]
         self.filenames += carl_data
         self.test_filenames += carl_data
-        if self.logging:
-            print 'Training file size: ' + str(len(self.filenames))
-            print 'Test file size: ' + str(len(self.test_filenames))
+        self.logger.log('Training file size: ' + str(len(self.filenames)))
+        self.logger.log('Test file size: ' + str(len(self.test_filenames)))
 
     def seperate_carl(self):
         carl_data = []

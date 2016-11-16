@@ -8,7 +8,8 @@ import random
 # With a constructor that sets train_set valid_train_set,
 # test_set, valid_test_set, and classes
 class Data(object):
-    def __init__(self):
+    def __init__(self, logger):
+        self.logger = logger
         self.train_set = [] # set for training input
         self.valid_train_set = [] # Set for valid training output
         self.test_set = [] # Set for testing input
