@@ -1,3 +1,4 @@
+import cPickle as pickle
 import tensorflow as tf
 import base as base
 import os.path

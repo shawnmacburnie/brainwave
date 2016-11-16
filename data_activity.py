@@ -1,15 +1,12 @@
 import random
 import math
 import numpy as np
+from data import Data
 
 # Classifying Activity
-class TrainingData():
+class TrainingData(Data):
     def __init__(self, window_size = 100, logging = True):
-        self.train_set = [] # set for training input
-        self.valid_train_set = [] # Set for valid training output
-        self.test_set = [] # Set for testing input
-        self.valid_test_set = [] # Set for valid test output
-
+        super(TrainingData, self).__init__()
         self.logging = logging
         self.window_size = window_size # 10 seconds
         self.classes = ["game", "music", "reading", "video"]
@@ -28,9 +25,6 @@ class TrainingData():
         if self.logging:
             print "Finished Initilizing Data"
 
-    def get_num_out(self):
-        return len(self.classes)
-
     def init_test_files(self):
         self.test_filenames = []
         random.shuffle(self.filenames)
@@ -46,6 +40,8 @@ class TrainingData():
         indexes = {"game": break_point, "music": break_point, "reading": break_point, "video": break_point}
         while len(self.test_filenames) < len(self.filenames) - break_point:
             for key, value in indexes.iteritems():
+                if value >= len(self.filenames):
+                    value = 0
                 filename = self.filenames[value]
                 name = self.get_name(filename)
                 while name != key:
@@ -58,26 +54,6 @@ class TrainingData():
                 indexes[key] = value + 1
                 if value >= len(self.filenames):
                     value = 0
-
-
-
-    def shuffle_set(self):
-        if len(self.train_set) == 0 or len(self.valid_train_set) == 0:
-            self.get_files()
-        # print "completed, now going to shuffle, this may take a bit of time as we have " + str(len(self.train_set))
-        tmpList = list(zip(self.train_set, self.valid_train_set))
-        random.shuffle(tmpList)
-        self.train_set, self.valid_train_set = zip(*tmpList)
-
-    def get_train_size(self):
-        return len(self.train_set)
-
-    def get_test_size(self):
-        return len(self.test_set)
-
-    def get_num_in(self):
-        return len(self.train_set[0])
-
 
     def get_batch(self, batch_size):
         train = self.train_set[self.current_data_index:self.current_data_index + batch_size]
@@ -111,9 +87,6 @@ class TrainingData():
 
     def is_at_test_batch_end(self):
         return self.current_test_index >= len(self.test_filenames)
-
-    def get_output_order(self):
-        return self.classes
 
     def get_test_set(self):
         input_data = []

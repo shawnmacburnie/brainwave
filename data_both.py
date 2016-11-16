@@ -1,40 +1,16 @@
 import random
 import math
 import numpy as np
-
-class Data():
-    def get_num_out(self):
-        return len(self.classes)
-
-    def get_num_in(self):
-        return len(self.train_set[0])
-
-    def shuffle_set(self):
-        if len(self.train_set) == 0 or len(self.valid_train_set) == 0:
-            self.get_files()
-        tmpList = list(zip(self.train_set, self.valid_train_set))
-        random.shuffle(tmpList)
-        self.train_set, self.valid_train_set = zip(*tmpList)
-
-    def get_train_size(self):
-        return len(self.train_set)
-
-    def get_test_size(self):
-        return len(self.test_set)
-
-    def get_output_order(self):
-        return self.classes
+from data import Data
 
 # Classifying Activity and Person
 class TrainingData(Data):
     def __init__(self, window_size = 100, logging = True):
-        self.train_set = [] # set for training input
-        self.valid_train_set = [] # Set for valid training output
-        self.test_set = [] # Set for testing input
-        self.valid_test_set = [] # Set for valid test output
-
-        self.window_size = window_size # 10 seconds
+        super(TrainingData, self).__init__()
         self.logging = logging
+        self.current_data_index = 0
+        self.current_test_index = 0
+        self.window_size = window_size # 10 seconds
         self.classes = ["Bruce-game", "Bruce-music", "Bruce-reading", "Bruce-video",
              "Carl-game", "Carl-music", "Carl-reading", "Carl-video",
              "Jerry-game", "Jerry-music", "Jerry-reading", "Jerry-video",
@@ -50,9 +26,6 @@ class TrainingData(Data):
             print "Initilizing Data"
 
         self.init_test_files()
-
-        self.current_data_index = 0
-        self.current_test_index = 0
 
         self.get_files()
         self.shuffle_set()
