@@ -10,7 +10,7 @@ from logger import Logger
 class ASDS():
     def __init__(self):
         self.sess = tf.InteractiveSession()
-        self.networks = ['nn256', 'nn1024', 'nn256_256', 'nn1024_256', 'nn1024_1024', 'nn256_256_256']
+        self.networks = ['nn256', 'nn1024', 'nn256_256', 'nn1024_256', 'nn1024_1024', 'nn256_256_256', 'nn256_256_256_256']
         self.logger = Logger(shouldLog=True)
 
     def train(self, TrainingData):
